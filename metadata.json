@@ -1,0 +1,8 @@
+{
+  "name": "Weather Intelligence",
+  "description": "AI-powered weather insights and forecasts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
