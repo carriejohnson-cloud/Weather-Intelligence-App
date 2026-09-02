@@ -39,8 +39,8 @@ async function startServer() {
 
       const prompt = `You are an expert, highly actionable meteorological AI assistant. 
 Given the following weather data for ${location}, provide a short, insightful summary of what to expect today and over the coming week.
-Also give specific advice on how to dress, and any potential impacts on outdoor activities.
-${userContext ? `The user provided the following context/plans: "${userContext}". Please tailor your advice specifically to this context.` : ""}
+Please structure your response with clear headings, specifically including a section titled "## Recommendations" where you give specific advice on how to dress, and any potential impacts on outdoor activities.
+${userContext ? `The user provided the following context/plans: "${userContext}". Please tailor your recommendations specifically to this context.` : ""}
 
 Keep it concise, friendly, and highly actionable. Format the response with clean, scannable Markdown (use bolding and bullet points where helpful). Do not include any meta-commentary, just the intelligence report.
 
@@ -61,7 +61,8 @@ ${JSON.stringify(weatherData, null, 2)}
       res.json({ text: response.text });
     } catch (error) {
       console.error("Error generating intelligence:", error);
-      res.status(500).json({ error: "Failed to generate intelligence." });
+      const errorMessage = error instanceof Error ? error.message : "Failed to generate intelligence.";
+      res.status(500).json({ error: errorMessage });
     }
   });
 

@@ -5,6 +5,7 @@ import Markdown from 'react-markdown';
 import { format } from 'date-fns';
 
 import { WeatherIcon } from './components/WeatherIcon';
+import { WeatherChart } from './components/WeatherChart';
 import { searchLocation, getWeather, getIntelligence } from './lib/weather';
 import { LocationResult, WeatherData } from './types';
 
@@ -78,9 +79,9 @@ export default function App() {
       const locName = `${loc.name}, ${loc.admin1 || loc.country}`;
       const text = await getIntelligence(locName, data, context);
       setIntelligence(text);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      setIntelligence("Failed to generate intelligence. Please try again.");
+      setIntelligence(e.message || "Failed to generate intelligence. Please try again.");
     } finally {
       setIsGeneratingIntel(false);
     }
@@ -227,8 +228,9 @@ export default function App() {
 
               {/* 7 Day Forecast */}
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-neutral-100">
-                <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-6 px-2">7-Day Outlook</h3>
-                <div className="flex flex-col gap-1">
+                <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-2 px-2">7-Day Trend</h3>
+                <WeatherChart data={weatherData.daily} />
+                <div className="flex flex-col gap-1 mt-6">
                   {weatherData.daily.time.map((timeStr, i) => {
                     const date = new Date(timeStr);
                     // Add timezone offset to fix local date issues when just parsing YYYY-MM-DD
@@ -297,7 +299,7 @@ export default function App() {
                         <p className="text-sm font-medium animate-pulse">Analyzing weather models...</p>
                       </div>
                     ) : intelligence ? (
-                      <div className="text-neutral-200 text-sm sm:text-base leading-relaxed [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-3 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>h3]:text-white [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4 [&>li]:mb-1 [&>strong]:text-white">
+                      <div className="text-neutral-200 text-sm sm:text-base leading-relaxed [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-3 [&>h2]:text-xl [&>h2]:text-white [&>h2]:border-b [&>h2]:border-white/20 [&>h2]:pb-2 [&>h2]:mt-8 [&>h2:first-child]:mt-0 [&>h2]:font-bold [&>h2]:mb-4 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>h3]:text-white [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4 [&>li]:mb-1 [&>strong]:text-white">
                         <Markdown>{intelligence}</Markdown>
                       </div>
                     ) : (

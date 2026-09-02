@@ -29,7 +29,8 @@ export async function getIntelligence(location: string, weatherData: WeatherData
   });
   
   if (!res.ok) {
-    throw new Error('Failed to get intelligence');
+    const errorData = await res.json().catch(() => null);
+    throw new Error(errorData?.error || 'Failed to get intelligence');
   }
   
   const data = await res.json();
